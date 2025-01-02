@@ -1,22 +1,24 @@
 package com.intuit.benten.common.http;
-import org.apache.http.HeaderElement;
-import org.apache.http.HeaderElementIterator;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.conn.ConnectionKeepAliveStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicHeaderElementIterator;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.core5.http.HeaderElement;
+import org.apache.hc.core5.http.HeaderElementIterator;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.ConnectionKeepAliveStrategy;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.core5.http.message.BasicHeaderElementIterator;
+import org.apache.hc.core5.http.protocol.HTTP;
+import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Divakar Ungatla
@@ -116,9 +118,9 @@ public class HttpHelper {
             requestConfigBuilder.setProxy(new HttpHost(proxyHost, proxyPort));
         }
         RequestConfig requestConfig = requestConfigBuilder
-                .setConnectionRequestTimeout(this.connReqTimeoutMilliseconds)
-                .setConnectTimeout(connTimeoutMilliseconds)
-                .setSocketTimeout(this.socketTimeoutMilliseconds)
+                .setConnectionRequestTimeout(this.connReqTimeoutMilliseconds, TimeUnit.MILLISECONDS)
+                .setConnectTimeout(connTimeoutMilliseconds, TimeUnit.MILLISECONDS)
+                .setResponseTimeout(this.socketTimeoutMilliseconds, TimeUnit.MILLISECONDS)
                 .setStaleConnectionCheckEnabled(false)
                 .setRedirectsEnabled(true).setMaxRedirects(maxRedirects)
                 .build();
@@ -129,8 +131,8 @@ public class HttpHelper {
                 .setConnectionManager(poolingHttpClientConnectionManager)
                 .setKeepAliveStrategy(myStrategy).build();
         if (reapInterval > 0 && idleConnectionsTimeout > 0) {
-            LOGGER.debug(String
-                    .format("Initializing idle connection monitor thread with reap interval %s ms and idle connection time out %s ms",
+            LOGGER.debug("Initializing idle connection monitor thread with reap interval %s ms and idle connection time out %s ms"
+                    .formatted(
                             reapInterval, idleConnectionsTimeout));
             idcm = new IdleConnectionMonitorThread(
                     poolingHttpClientConnectionManager, reapInterval,

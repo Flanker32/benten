@@ -157,8 +157,7 @@ public class JiraConverter {
 
             if (value == null)
                 return JSONNull.getInstance();
-            else if (value instanceof ValueTuple) {
-                ValueTuple tuple = (ValueTuple)value;
+            else if (value instanceof ValueTuple tuple) {
                 json.put(tuple.type, tuple.value.toString());
             } else
                 json.put(ValueType.NAME.toString(), value.toString());
@@ -169,8 +168,7 @@ public class JiraConverter {
 
             if (value == null)
                 return JSONNull.getInstance();
-            else if (value instanceof ValueTuple) {
-                ValueTuple tuple = (ValueTuple)value;
+            else if (value instanceof ValueTuple tuple) {
                 json.put(tuple.type, tuple.value.toString());
             } else
                 json.put(ValueType.KEY.toString(), value.toString());
@@ -179,11 +177,10 @@ public class JiraConverter {
         } else if (m.type.equals("string") || (m.type.equals("securitylevel") || m.type.equals("option") || m.type.equals("option-with-child"))) {
             if (value == null)
                 return "";
-            else if (value instanceof List)
-                return toJsonMap((List)value);
-            else if (value instanceof ValueTuple) {
+            else if (value instanceof List<?> list)
+                return toJsonMap(list);
+            else if (value instanceof ValueTuple tuple) {
                 JSONObject json = new JSONObject();
-                ValueTuple tuple = (ValueTuple)value;
                 json.put(tuple.type, tuple.value.toString());
                 return json.toString();
             }
@@ -201,11 +198,10 @@ public class JiraConverter {
         } else if (m.type.equals("any")) {
             if (value == null)
                 return JSONNull.getInstance();
-            else if (value instanceof List)
-                return toJsonMap((List)value);
-            else if (value instanceof ValueTuple) {
+            else if (value instanceof List<?> list)
+                return toJsonMap(list);
+            else if (value instanceof ValueTuple tuple) {
                 JSONObject json = new JSONObject();
-                ValueTuple tuple = (ValueTuple)value;
                 json.put(tuple.type, tuple.value.toString());
                 return json.toString();
             }
@@ -220,8 +216,7 @@ public class JiraConverter {
         JSONObject json = new JSONObject();
 
         for (Object item : list) {
-            if (item instanceof ValueTuple) {
-                ValueTuple vt = (ValueTuple)item;
+            if (item instanceof ValueTuple vt) {
                 json.put(vt.type, vt.value.toString());
             } else
                 json.put(ValueType.VALUE.toString(), item.toString());
@@ -268,8 +263,8 @@ public class JiraConverter {
             Object realValue = null;
             Object realResult = null;
 
-            if (val instanceof Operation) {
-                oper = (Operation)val;
+            if (val instanceof Operation operation) {
+                oper = operation;
                 realValue = oper.value;
             } else
                 realValue = val;
@@ -279,8 +274,7 @@ public class JiraConverter {
 
                 JSONObject itemMap = new JSONObject();
 
-                if (realValue instanceof ValueTuple) {
-                    ValueTuple tuple = (ValueTuple)realValue;
+                if (realValue instanceof ValueTuple tuple) {
                     itemMap.put(tuple.type, tuple.value.toString());
                 } else
                     itemMap.put(ValueType.NAME.toString(), realValue.toString());
@@ -311,8 +305,8 @@ public class JiraConverter {
     public static String getString(Object s) {
         String result = null;
 
-        if (s instanceof String)
-            result = (String)s;
+        if (s instanceof String string)
+            result = string;
 
         return result;
     }
@@ -320,8 +314,8 @@ public class JiraConverter {
     public static int getInteger(Object i) {
         int result = 0;
 
-        if (i instanceof Integer)
-            result = ((Integer)i).intValue();
+        if (i instanceof Integer integer)
+            result = integer.intValue();
 
         return result;
     }

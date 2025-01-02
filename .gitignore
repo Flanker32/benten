@@ -34,3 +34,5 @@ karate.log
 
 #target folders
 */target/*
+
+.autodev

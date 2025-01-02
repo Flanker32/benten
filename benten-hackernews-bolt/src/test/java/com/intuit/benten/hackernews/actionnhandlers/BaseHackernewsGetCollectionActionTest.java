@@ -6,20 +6,17 @@ import com.intuit.benten.hackernews.model.HackernewsItem;
 import com.intuit.benten.hackernews.utils.HackernewsConstants;
 import com.intuit.benten.hackernews.utils.HackernewsService;
 import com.intuit.benten.hackernews.utils.SlackHackerNewsMessageRenderer;
-import org.junit.Assert;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import utils.HackernewsClientMockConfig;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
 @ActiveProfiles("mock")
-@ContextConfiguration(classes={HackernewsClientMockConfig.class})
+@SpringJUnitConfig(classes = {HackernewsClientMockConfig.class})
 @EnableAutoConfiguration
 public class BaseHackernewsGetCollectionActionTest {
     @Autowired
@@ -36,7 +33,7 @@ public class BaseHackernewsGetCollectionActionTest {
         BentenHandlerResponse bentenHandlerResponse = new BentenHandlerResponse();
         bentenHandlerResponse.setBentenSlackResponse(SlackHackerNewsMessageRenderer.renderItemList(hackernewsItems));
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
     }
 
     // Negative limit
@@ -49,7 +46,7 @@ public class BaseHackernewsGetCollectionActionTest {
         try {
             hackernewsService.fetchHackernewsCollectionContent(action, resultSetSize, offset, null);
         } catch (BentenHackernewsException e) {
-            Assert.assertNotNull(e.getMessage());
+            Assertions.assertNotNull(e.getMessage());
         }
     }
 
@@ -63,7 +60,7 @@ public class BaseHackernewsGetCollectionActionTest {
         try {
             hackernewsService.fetchHackernewsCollectionContent(action, resultSetSize, offset, null);
         } catch (BentenHackernewsException e) {
-            Assert.assertNotNull(e.getMessage());
+            Assertions.assertNotNull(e.getMessage());
         }
     }
 
@@ -77,7 +74,7 @@ public class BaseHackernewsGetCollectionActionTest {
         try {
             hackernewsService.fetchHackernewsCollectionContent(action, resultSetSize, offset, null);
         } catch (BentenHackernewsException e) {
-            Assert.assertNotNull(e.getMessage());
+            Assertions.assertNotNull(e.getMessage());
         }
     }
 
@@ -88,7 +85,7 @@ public class BaseHackernewsGetCollectionActionTest {
         int resultSetSize = 15;
 
         List<HackernewsItem> items = hackernewsService.fetchHackernewsCollectionContent(action, resultSetSize, null, null);
-        Assert.assertEquals(items.size(), resultSetSize);
+        Assertions.assertEquals(items.size(), resultSetSize);
     }
 
     // Custom resultSetSize and default offset
@@ -99,6 +96,6 @@ public class BaseHackernewsGetCollectionActionTest {
         int startIndex = 5;
 
         List<HackernewsItem> items = hackernewsService.fetchHackernewsCollectionContent(action, resultSetSize, null, startIndex);
-        Assert.assertEquals(items.size(), resultSetSize);
+        Assertions.assertEquals(items.size(), resultSetSize);
     }
 }

@@ -6,7 +6,7 @@ import com.intuit.benten.properties.AiProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 
 @ComponentScan("com.intuit.benten")

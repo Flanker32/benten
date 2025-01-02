@@ -3,19 +3,16 @@ package utils;
 import com.intuit.benten.hackernews.exceptions.BentenHackernewsException;
 import com.intuit.benten.hackernews.properties.HackernewsProperties;
 import com.intuit.benten.hackernews.utils.FetchHackernewsItemTask;
-import org.apache.http.HttpResponse;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.apache.hc.core5.http.HttpResponse;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-@RunWith(SpringRunner.class)
 @ActiveProfiles("mock")
-@ContextConfiguration(classes={HackernewsClientMockConfig.class})
+@SpringJUnitConfig(classes = {HackernewsClientMockConfig.class})
 @EnableAutoConfiguration
 public class FetchHackernewsItemTaskTest {
     @Autowired
@@ -34,7 +31,7 @@ public class FetchHackernewsItemTaskTest {
     public void testFetchTaskCall() {
         FetchHackernewsItemTask task = buildFetchTask();
         HttpResponse response = task.call();
-        Assert.assertEquals(response.getStatusLine().getStatusCode(), 200);
+        Assertions.assertEquals(response.getCode(), 200);
     }
 
     // Failed hackernews api response
@@ -44,7 +41,7 @@ public class FetchHackernewsItemTaskTest {
         try {
             task.call();
         } catch (BentenHackernewsException e) {
-            Assert.assertNotNull(e.getMessage());
+            Assertions.assertNotNull(e.getMessage());
         }
     }
 
@@ -55,7 +52,7 @@ public class FetchHackernewsItemTaskTest {
         try {
             task.call();
         } catch (BentenHackernewsException e) {
-            Assert.assertNotNull(e.getMessage());
+            Assertions.assertNotNull(e.getMessage());
         }
     }
 }

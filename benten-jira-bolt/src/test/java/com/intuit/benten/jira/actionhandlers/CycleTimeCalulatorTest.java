@@ -7,8 +7,8 @@ import com.intuit.benten.jira.model.Issue;
 import com.intuit.benten.jira.model.bentenjira.StoryCycleTime;
 import com.intuit.benten.jira.model.ghc.SprintReport;
 import net.sf.json.JSONObject;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Date;
@@ -20,7 +20,7 @@ import java.util.Date;
 public class CycleTimeCalulatorTest {
 
     @Test
-    @Ignore
+    @Disabled
     public void testCycleTimeCalculator() throws IOException {
         String json = "{}";
         JSONObject jsonObject = JiraConverter.objectMapper.readValue(json, JSONObject.class);

@@ -5,7 +5,6 @@ import com.google.cloud.dialogflow.v2.TextInput.Builder;
 import com.intuit.benten.common.nlp.BentenMessage;
 import com.intuit.benten.nlp.NlpClient;
 import com.intuit.benten.properties.AiProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import com.intuit.benten.exceptions.AiException;

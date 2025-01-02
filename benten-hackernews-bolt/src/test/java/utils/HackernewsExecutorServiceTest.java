@@ -5,21 +5,18 @@ import com.intuit.benten.hackernews.model.HackernewsItem;
 import com.intuit.benten.hackernews.properties.HackernewsProperties;
 import com.intuit.benten.hackernews.utils.FetchHackernewsItemTask;
 import com.intuit.benten.hackernews.utils.HackernewsExecutorService;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.LinkedList;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
 @ActiveProfiles("mock")
-@ContextConfiguration(classes={HackernewsClientMockConfig.class})
+@SpringJUnitConfig(classes = {HackernewsClientMockConfig.class})
 @EnableAutoConfiguration
 public class HackernewsExecutorServiceTest {
     private static int requestCount = 3;
@@ -54,7 +51,7 @@ public class HackernewsExecutorServiceTest {
     public void testFetchValidCollection() {
         List<FetchHackernewsItemTask> tasks = generateValidTasks();
         List<HackernewsItem> items = hackernewsExecutorService.submitFetchHackernewsItemTasks(tasks);
-        Assert.assertEquals(items.size(), requestCount);
+        Assertions.assertEquals(items.size(), requestCount);
     }
 
     @Test
@@ -63,7 +60,7 @@ public class HackernewsExecutorServiceTest {
         try {
             hackernewsExecutorService.submitFetchHackernewsItemTasks(tasks);
         } catch (BentenHackernewsException e) {
-            Assert.assertNotNull(e.getMessage());
+            Assertions.assertNotNull(e.getMessage());
         }
     }
 }

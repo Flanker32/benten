@@ -44,7 +44,7 @@ public class JiraSprintVelocityActionHandler implements BentenActionHandler {
         try {
             List<Board> boards = bentenJiraClient.getBoardsByName(boardName);
 
-            List<Sprint> sprints = bentenJiraClient.getSprintsByBoardId(boards.get(0).getId());
+            List<Sprint> sprints = bentenJiraClient.getSprintsByBoardId(boards.getFirst().getId());
             Collections.reverse(sprints);
 
             List<Sprint> closedSprints = sprints.stream()
@@ -54,7 +54,7 @@ public class JiraSprintVelocityActionHandler implements BentenActionHandler {
 
             List<Velocity> sprintVelocities =
                     closedSprints.stream().map((sprint) -> {
-                        return velocity(sprint, boards.get(0));
+                        return velocity(sprint, boards.getFirst());
                     }).collect(Collectors.toList());
             List<Table> velocityTables = null;
 

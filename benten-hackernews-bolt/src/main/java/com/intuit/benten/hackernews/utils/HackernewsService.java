@@ -5,9 +5,9 @@ import com.intuit.benten.hackernews.exceptions.BentenHackernewsException;
 import com.intuit.benten.hackernews.model.HackernewsItem;
 import com.intuit.benten.hackernews.model.HackernewsSetRange;
 import com.intuit.benten.hackernews.properties.HackernewsProperties;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +52,8 @@ public class HackernewsService {
         try {
             HttpResponse res = httpHelper.getClient().execute(req);
 
-            if (res.getStatusLine().getStatusCode() != 200) {
-                String message = "Response code " + res.getStatusLine().getStatusCode();
+            if (res.getCode() != 200) {
+                String message = "Response code " + res.getCode();
                 throw new BentenHackernewsException(message);
             }
 

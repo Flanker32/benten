@@ -9,12 +9,12 @@ import com.intuit.benten.jira.model.Project;
 import com.intuit.benten.jira.model.Transition;
 import com.intuit.benten.jira.model.Issue;
 import net.sf.json.JSONObject;
-import org.apache.http.*;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,7 @@ public class JiraHttpClient extends BentenHttpClient {
             HttpGet httpGet = new HttpGet(JiraHttpHelper.createSearchUri(jql, null, expandedFields, maxResults, 0));
             HttpResponse httpResponse = request(httpGet);
 
-            if(httpResponse.getStatusLine().getStatusCode()!=200){
+            if(httpResponse.getCode()!=200){
 
                handleJiraException(httpResponse);
             }
@@ -61,7 +61,7 @@ public class JiraHttpClient extends BentenHttpClient {
         try {
             HttpGet httpGet = new HttpGet(JiraHttpHelper.issueDetailsUri(issueKey, expandedFields));
             HttpResponse httpResponse = request(httpGet);
-            if(httpResponse.getStatusLine().getStatusCode()!=200){
+            if(httpResponse.getCode()!=200){
                 handleJiraException(httpResponse);
             }
             String json = EntityUtils.toString(httpResponse.getEntity());
@@ -84,7 +84,7 @@ public class JiraHttpClient extends BentenHttpClient {
             stringEntity.setContentType("application/json");
             httpPut.setEntity(stringEntity);
             HttpResponse httpResponse = request(httpPut);
-            if(httpResponse.getStatusLine().getStatusCode()!=204){
+            if(httpResponse.getCode()!=204){
                 handleJiraException(httpResponse);
             }
 
@@ -100,7 +100,7 @@ public class JiraHttpClient extends BentenHttpClient {
             StringEntity stringEntity = formPayload(jsonObject);
             httpPost.setEntity(stringEntity);
             HttpResponse httpResponse = request(httpPost);
-            if(httpResponse.getStatusLine().getStatusCode()!=201){
+            if(httpResponse.getCode()!=201){
                 handleJiraException(httpResponse);
             }
 
@@ -116,7 +116,7 @@ public class JiraHttpClient extends BentenHttpClient {
             StringEntity stringEntity = formPayload(jsonObject);
             httpPost.setEntity(stringEntity);
             HttpResponse httpResponse = request(httpPost);
-            if(httpResponse.getStatusLine().getStatusCode()!=204){
+            if(httpResponse.getCode()!=204){
                 handleJiraException(httpResponse);
             }
 
@@ -130,7 +130,7 @@ public class JiraHttpClient extends BentenHttpClient {
         try {
             HttpGet httpGet = new HttpGet(JiraHttpHelper.possibleTransitionsUri(issueKey));
             HttpResponse httpResponse = request(httpGet);
-            if(httpResponse.getStatusLine().getStatusCode()!=200){
+            if(httpResponse.getCode()!=200){
                handleJiraException(httpResponse);
             }
             String json = EntityUtils.toString(httpResponse.getEntity());
@@ -151,7 +151,7 @@ public class JiraHttpClient extends BentenHttpClient {
             StringEntity stringEntity = formPayload(jsonObject);
             httpPost.setEntity(stringEntity);
             HttpResponse httpResponse = request(httpPost);
-            if(httpResponse.getStatusLine().getStatusCode()!=201){
+            if(httpResponse.getCode()!=201){
                 handleJiraException(httpResponse);
             }
 
@@ -168,7 +168,7 @@ public class JiraHttpClient extends BentenHttpClient {
             params.put("issuetypeNames", issueType);
             HttpGet httpGet = new HttpGet(JiraHttpHelper.metaDataUri(params));
             HttpResponse httpResponse = request(httpGet);
-            if(httpResponse.getStatusLine().getStatusCode()!=200){
+            if(httpResponse.getCode()!=200){
                 handleJiraException(httpResponse);
             }
             String json = EntityUtils.toString(httpResponse.getEntity());
@@ -176,11 +176,11 @@ public class JiraHttpClient extends BentenHttpClient {
                     .readValue(json,JSONObject.class);
             List<Project> projects = JiraConverter.objectMapper.readValue(jsonObject.get("projects").toString(),new TypeReference<List<Project>>(){});
 
-            if(projects.isEmpty() || projects.get(0).getIssuetypes().isEmpty()) {
+            if(projects.isEmpty() || projects.getFirst().getIssuetypes().isEmpty()) {
                 throw new BentenJiraException("Project '"+ projectKey + "'  or issue type '" + issueType +
                         "' missing from create metadata. Do you have enough permissions?");
             }
-            return projects.get(0).getIssuetypes().get(0).getFields();
+            return projects.getFirst().getIssuetypes().getFirst().getFields();
         }catch(Exception ex){
             throw new RuntimeException(ex);
         }
@@ -196,7 +196,7 @@ public class JiraHttpClient extends BentenHttpClient {
             stringEntity.setContentType("application/json");
             httpPost.setEntity(stringEntity);
             HttpResponse httpResponse = request(httpPost);
-            if(httpResponse.getStatusLine().getStatusCode()!=201){
+            if(httpResponse.getCode()!=201){
                 handleJiraException(httpResponse);
             }
             String json = EntityUtils.toString(httpResponse.getEntity());
@@ -226,7 +226,7 @@ public class JiraHttpClient extends BentenHttpClient {
             String firstKey = (String) error.keys().next();
             throw new BentenJiraException( error.getString(firstKey));
         }else{
-            throw new BentenJiraException( jiraError.getErrorMessages().get(0));
+            throw new BentenJiraException( jiraError.getErrorMessages().getFirst());
         }
 
     }

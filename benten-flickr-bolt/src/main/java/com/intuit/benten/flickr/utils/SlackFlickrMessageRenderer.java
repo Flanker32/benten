@@ -23,7 +23,7 @@ public class SlackFlickrMessageRenderer {
         SlackFormatter slackFormatter = SlackFormatter.create();
         List<BentenSlackAttachment> attachments = new ArrayList<>();
         if (photos.size() > 0) {
-            slackFormatter.text(String.format("Results found (%d):\n", photos.size()));
+            slackFormatter.text("Results found (%d):\n".formatted(photos.size()));
             for (Photo photo : photos) {
                 BentenSlackAttachment attachment = new BentenSlackAttachment();
                 attachment.setTitle(photo.getTitle());
@@ -45,7 +45,7 @@ public class SlackFlickrMessageRenderer {
         SlackFormatter slackFormatter = SlackFormatter.create();
         List<BentenSlackAttachment> attachments = new ArrayList<>();
         if (cameras.size() > 0) {
-            slackFormatter.text(String.format("Results found (%d):\n", cameras.size()));
+            slackFormatter.text("Results found (%d):\n".formatted(cameras.size()));
             for (Camera camera : cameras) {
                 String searchUrl = SearchUtils.generateGoogleSearchUrl(camera.getName());
                 slackFormatter.link(searchUrl, camera.getName()).newline();

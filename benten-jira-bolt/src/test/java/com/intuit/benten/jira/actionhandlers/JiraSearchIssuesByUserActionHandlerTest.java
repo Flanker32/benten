@@ -8,8 +8,8 @@ import com.intuit.benten.jira.helpers.MessageBuilder;
 import com.intuit.benten.jira.BentenJiraClient;
 import com.intuit.benten.jira.helpers.TestHelper;
 import com.intuit.benten.jira.model.Issue;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -45,10 +45,10 @@ public class JiraSearchIssuesByUserActionHandlerTest extends JiraActionHandlerTe
 
 
         List<Issue> issues = bentenJiraClient.searchIssuesByAssignee(TestHelper.assigneeName,TestHelper.expandedFields,10);
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
-        Assert.assertTrue(issues.size() > 0);
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(TestHelper.project_key+"-1"));
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(TestHelper.project_key+"-2"));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
+        Assertions.assertTrue(issues.size() > 0);
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(TestHelper.project_key+"-1"));
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(TestHelper.project_key+"-2"));
 
 
     }
@@ -69,9 +69,9 @@ public class JiraSearchIssuesByUserActionHandlerTest extends JiraActionHandlerTe
         BentenHandlerResponse bentenHandlerResponse =
                 jiraSearchIssuesByUserActionHandler.handle(MessageBuilder.constructBentenMessage(currentUser,userOfInterest));
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(issueKey));
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(anotherIssueKey));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(issueKey));
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(anotherIssueKey));
     }
 
 }

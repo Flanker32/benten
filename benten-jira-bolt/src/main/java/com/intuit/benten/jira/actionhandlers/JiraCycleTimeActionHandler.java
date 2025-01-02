@@ -53,7 +53,7 @@ public class JiraCycleTimeActionHandler implements BentenActionHandler {
         try {
             List<Board> boards = bentenJiraClient.getBoardsByName(boardName);
 
-            List<Sprint> sprints = bentenJiraClient.getSprintsByBoardId(boards.get(0).getId());
+            List<Sprint> sprints = bentenJiraClient.getSprintsByBoardId(boards.getFirst().getId());
             Collections.reverse(sprints);
 
             List<Sprint> closedSprints = sprints.stream()
@@ -63,7 +63,7 @@ public class JiraCycleTimeActionHandler implements BentenActionHandler {
 
             List<SprintCycleTime> sprintCycleTimes =
                     closedSprints.stream().map((sprint) -> {
-                        return cycleTime(sprint, boards.get(0));
+                        return cycleTime(sprint, boards.getFirst());
                     }).collect(Collectors.toList());
             List<Table> cycleTimeTables = null;
 

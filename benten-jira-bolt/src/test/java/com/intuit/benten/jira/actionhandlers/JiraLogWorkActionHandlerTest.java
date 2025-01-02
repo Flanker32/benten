@@ -8,8 +8,8 @@ import com.intuit.benten.jira.helpers.MessageBuilder;
 import com.intuit.benten.jira.BentenJiraClient;
 import com.intuit.benten.jira.helpers.TestHelper;
 import com.intuit.benten.jira.model.Issue;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -38,9 +38,9 @@ public class JiraLogWorkActionHandlerTest extends JiraActionHandlerTest {
                         .constructBentenLogWorkMessage(new JsonPrimitive(issueKey),time,currentUser));
 
         Issue issue = TestHelper.getIssueDetails(bentenJiraClient,issueKey);
-        Assert.assertEquals(issue.getWorkLogs().get(0).getTimeSpent(),"3h 4m");
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Done! Logged"));
+        Assertions.assertEquals(issue.getWorkLogs().getFirst().getTimeSpent(),"3h 4m");
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Done! Logged"));
     }
 
     @Test
@@ -55,9 +55,9 @@ public class JiraLogWorkActionHandlerTest extends JiraActionHandlerTest {
                         .constructBentenLogWorkMessage(new JsonPrimitive("INVALID-1001"),time,currentUser));
 
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Issue Does Not Exist"));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Issue Does Not Exist"));
     }
 
 }

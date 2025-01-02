@@ -5,8 +5,8 @@ import com.google.gson.JsonPrimitive;
 import com.intuit.benten.common.actionhandlers.BentenHandlerResponse;
 import com.intuit.benten.jenkins.helpers.JenkinsMessageBuilder;
 import com.intuit.benten.jenkins.BaseJenkinsTest;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -27,6 +27,6 @@ public class JenkinsJobDetailsByJobNameActionHandlerTest extends BaseJenkinsTest
         BentenHandlerResponse bentenHandlerResponse =
                 jenkinsJobDetailsByJobNameActionHandler.handle(JenkinsMessageBuilder.constructBentenMessageForJobName(jsonElement));
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
     }
 }

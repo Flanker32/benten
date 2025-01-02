@@ -66,7 +66,7 @@ public class WeatherResponseUtil {
     JsonObject checkerObject = object.getAsJsonObject(checker);
     if (checkerObject != null && checkerObject.isJsonObject() && checkerObject.has(key)) {
       String value = checkerObject.getAsJsonPrimitive(key).getAsString();
-      responseToSend.bold(String.format(messageFormat, value));
+      responseToSend.bold(messageFormat.formatted(value));
       responseToSend.newline();
     } else if(elseMessage){
       responseToSend.bold("No " + checker);

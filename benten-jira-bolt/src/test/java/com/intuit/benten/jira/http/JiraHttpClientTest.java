@@ -9,8 +9,8 @@ import com.intuit.benten.jira.model.Issue;
 import com.intuit.benten.jira.model.Transition;
 import com.intuit.benten.jira.model.User;
 import net.sf.json.JSONObject;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -67,8 +67,8 @@ public class JiraHttpClientTest extends JiraClientTest {
 
         Issue issue = jiraHttpClient.getIssueDetails(issueKey,expandedFields);
 
-        Assert.assertEquals(TestHelper.assigneeName,issue.getAssignee().getName().toString());
-        Assert.assertEquals(issueKey,issue.getKey());
+        Assertions.assertEquals(TestHelper.assigneeName,issue.getAssignee().getName().toString());
+        Assertions.assertEquals(issueKey,issue.getKey());
     }
 
 
@@ -84,8 +84,8 @@ public class JiraHttpClientTest extends JiraClientTest {
         Thread.sleep(2000);
         jiraHttpClient.updateIssue(issueKey,fields);
         Issue issue = jiraHttpClient.getIssueDetails(issueKey,JiraConverter.CommonExpandedFields);
-        Assert.assertEquals(TestHelper.assigneeName,issue.getAssignee().getName().toString());
-        Assert.assertEquals(issueKey,issue.getKey());
+        Assertions.assertEquals(TestHelper.assigneeName,issue.getAssignee().getName().toString());
+        Assertions.assertEquals(issueKey,issue.getKey());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class JiraHttpClientTest extends JiraClientTest {
         Thread.sleep(2000);
         jiraHttpClient.logWork(issueKey,worklog);
         Issue issueAfterLogging = jiraHttpClient.getIssueDetails(issueKey,JiraConverter.CommonExpandedFields);
-        Assert.assertEquals(1,issueAfterLogging.getWorkLogs().size());
+        Assertions.assertEquals(1,issueAfterLogging.getWorkLogs().size());
 
     }
 
@@ -115,7 +115,7 @@ public class JiraHttpClientTest extends JiraClientTest {
         TestHelper.updateAssigneeAndReporter(bentenJiraClient,issueKey);
         JSONObject transition = new JSONObject();
         List<Transition> transitions = jiraHttpClient.getPossibleTransitions(issueKey);
-        transition.put("transition",transitions.get(0));
+        transition.put("transition",transitions.getFirst());
         jiraHttpClient.transitionIssue(issueKey,transition);
     }
 
@@ -129,7 +129,7 @@ public class JiraHttpClientTest extends JiraClientTest {
         Thread.sleep(2000);
         jiraHttpClient.comment(issueKey,jsonObject);
         Issue issue = jiraHttpClient.getIssueDetails(issueKey,JiraConverter.CommonExpandedFields);
-        Assert.assertEquals(comment,issue.getComments().get(issue.getComments().size()-1).getBody());
+        Assertions.assertEquals(comment,issue.getComments().get(issue.getComments().size()-1).getBody());
     }
 
     @Test
@@ -140,7 +140,7 @@ public class JiraHttpClientTest extends JiraClientTest {
 
         JSONObject fields= jiraHttpClient.getCreateMetaData(projectKey,issueType);
 
-        Assert.assertNotNull(fields);
+        Assertions.assertNotNull(fields);
 
     }
 
@@ -157,7 +157,7 @@ public class JiraHttpClientTest extends JiraClientTest {
         jsonObject.put(Field.PROJECT,JiraConverter.toJson(Field.PROJECT,TestHelper.project_key,metaData));
         jsonObject.put(Field.ISSUE_TYPE ,JiraConverter.toJson(Field.ISSUE_TYPE,TestHelper.issue_type,metaData));
         String issueUri = jiraHttpClient.createIssue(jsonObject);
-        Assert.assertNotNull(issueUri);
+        Assertions.assertNotNull(issueUri);
 
     }
 
@@ -177,8 +177,8 @@ public class JiraHttpClientTest extends JiraClientTest {
                 .concat(","+Field.SUMMARY);
 
         List<Issue> issues = jiraHttpClient.searchIssues(jql,expandedFields,maxResults);
-        Assert.assertTrue(issues.size() > 0);
-        Assert.assertEquals(issues.get(0).getAssignee().getName().toString(),TestHelper.assigneeName);
-        Assert.assertTrue(issues.get(0).getSummary() instanceof String);
+        Assertions.assertTrue(issues.size() > 0);
+        Assertions.assertEquals(issues.getFirst().getAssignee().getName().toString(),TestHelper.assigneeName);
+        Assertions.assertTrue(issues.getFirst().getSummary() instanceof String);
     }
 }

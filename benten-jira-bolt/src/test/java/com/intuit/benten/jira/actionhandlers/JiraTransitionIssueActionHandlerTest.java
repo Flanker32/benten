@@ -6,8 +6,8 @@ import com.intuit.benten.common.actionhandlers.BentenHandlerResponse;
 import com.intuit.benten.jira.helpers.MessageBuilder;
 import com.intuit.benten.jira.BentenJiraClient;
 import com.intuit.benten.jira.helpers.TestHelper;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -39,8 +39,8 @@ public class JiraTransitionIssueActionHandlerTest extends JiraActionHandlerTest{
 
         Thread.sleep(500);
 
-        Assert.assertTrue(TestHelper.getIssueDetails(bentenJiraClient,issueKey).getStatus().getName().equals("Closed"));
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertTrue(TestHelper.getIssueDetails(bentenJiraClient,issueKey).getStatus().getName().equals("Closed"));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
 
     }
     @Test
@@ -58,9 +58,9 @@ public class JiraTransitionIssueActionHandlerTest extends JiraActionHandlerTest{
 
         Thread.sleep(1000);
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Issue Does Not Exist"));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Issue Does Not Exist"));
 
     }
 

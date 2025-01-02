@@ -5,18 +5,15 @@ import com.intuit.benten.nlp.NlpClient;
 import com.intuit.benten.nlp.dialogflow.DialogFlowClient;
 import com.intuit.benten.properties.BentenProxyConfig;
 import com.intuit.benten.properties.AiProperties;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author Divakar Ungatla
  * @version 1.0
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes={NlpClient.class, BentenProxyConfig.class, AiProperties.class})
 public class DialogFlowClientTest {
 
@@ -25,7 +22,7 @@ public class DialogFlowClientTest {
     @Autowired
     private BentenProxyConfig bentenProxyConfig;
 
-    @Before
+    @BeforeEach
     public void setup() {
         nlpClient = new DialogFlowClient("project-id");
     }

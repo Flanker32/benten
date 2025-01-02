@@ -10,7 +10,7 @@ import com.intuit.benten.common.nlp.BentenMessage;
 import com.intuit.benten.flickr.exceptions.BentenFlickrException;
 import com.intuit.benten.flickr.helpers.FlickrMessageBuilder;
 import com.intuit.benten.flickr.helpers.FlickrResultBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

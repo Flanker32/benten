@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -175,11 +175,11 @@ public class BentenJenkinsClient {
             List<String> defaultValue = JsonPath.read(item,"$..defaultParameterValue.value");
             List<String> choices = JsonPath.read(item,"$..choices[*]");
 
-            logger.info("Name: " + name.get(0));
-            logger.info("Default Value: " + defaultValue.get(0));
+            logger.info("Name: " + name.getFirst());
+            logger.info("Default Value: " + defaultValue.getFirst());
             logger.info("Choices: " + choices);
-            jenkinsJobBuildParameter.setName(name.get(0));
-            jenkinsJobBuildParameter.setDefaultValue(defaultValue.get(0));
+            jenkinsJobBuildParameter.setName(name.getFirst());
+            jenkinsJobBuildParameter.setDefaultValue(defaultValue.getFirst());
             jenkinsJobBuildParameter.setChoices(choices);
             jenkinsJobBuildParameters.add(jenkinsJobBuildParameter);
         });

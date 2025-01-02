@@ -4,10 +4,10 @@ import com.intuit.benten.common.http.HttpHelper;
 import com.intuit.benten.weather.properties.WeatherProperties;
 import java.io.IOException;
 import java.net.URLEncoder;
-import javax.annotation.PostConstruct;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
+import jakarta.annotation.PostConstruct;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -12,4 +12,14 @@
 
   <name>benten-archetype</name>
   <url>http://maven.apache.org</url>
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+      <version>1.3.5</version>
+    </dependency>
+  </dependencies>
 </project>

@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 
 
@@ -190,7 +190,7 @@ public class BentenJiraClient {
         Board board;
         List<Sprint> sprints=null;
         if(boards!=null && !boards.isEmpty()){
-            board = boards.get(0);
+            board = boards.getFirst();
             sprints = jiraGhClient.sprints(board.getId());
         }
         return sprints;

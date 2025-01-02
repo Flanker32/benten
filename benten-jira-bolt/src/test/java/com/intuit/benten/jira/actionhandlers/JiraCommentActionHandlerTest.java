@@ -8,8 +8,8 @@ import com.intuit.benten.jira.helpers.MessageBuilder;
 import com.intuit.benten.jira.BentenJiraClient;
 import com.intuit.benten.jira.helpers.TestHelper;
 import com.intuit.benten.jira.model.Issue;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -42,11 +42,11 @@ public class JiraCommentActionHandlerTest extends JiraActionHandlerTest{
                         .constructBentenCommentMessage(new JsonPrimitive(issueKey),comment,currentUser));
         Thread.sleep(1000);
         Issue issue = TestHelper.getIssueDetails(bentenJiraClient,issueKey);
-        Assert.assertTrue(issue.getComments().get(0).getBody().contains(TestHelper.comment));
+        Assertions.assertTrue(issue.getComments().getFirst().getBody().contains(TestHelper.comment));
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("commented on"));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("commented on"));
     }
 
 
@@ -63,8 +63,8 @@ public class JiraCommentActionHandlerTest extends JiraActionHandlerTest{
                 jiraCommentActionHandler.handle(MessageBuilder
                         .constructBentenCommentMessage(new JsonPrimitive("INVALID-123"),comment,currentUser));
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Issue Does Not Exist"));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Issue Does Not Exist"));
     }
 }

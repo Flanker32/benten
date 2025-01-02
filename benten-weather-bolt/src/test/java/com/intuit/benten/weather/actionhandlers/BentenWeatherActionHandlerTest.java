@@ -8,16 +8,16 @@ import com.intuit.benten.common.channel.Channel;
 import com.intuit.benten.common.channel.ChannelInformation;
 import com.intuit.benten.common.nlp.BentenMessage;
 import java.util.HashMap;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @EnableAutoConfiguration
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ComponentScan(value = "com.intuit.benten")
 public class BentenWeatherActionHandlerTest {
 
@@ -27,7 +27,7 @@ public class BentenWeatherActionHandlerTest {
   @Test
   public void testHandleRRequest() {
     BentenHandlerResponse bentenHandlerResponse = bentenWeatherActionHandler.handle(constructBentenMessage("foo"));
-    Assert.assertEquals(bentenHandlerResponse.getBentenSlackResponse().getSlackText(),
+    Assertions.assertEquals(bentenHandlerResponse.getBentenSlackResponse().getSlackText(),
         BentenWeatherActionHandler.THANK_YOU_FOR_ASKING);
   }
 

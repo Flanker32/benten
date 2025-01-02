@@ -7,8 +7,8 @@ import com.intuit.benten.jira.BentenJiraClient;
 import com.intuit.benten.jira.helpers.MessageBuilder;
 import com.intuit.benten.jira.helpers.TestHelper;
 import com.intuit.benten.jira.model.Issue;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -40,10 +40,10 @@ public class JiraAssignIssuesToUserActionHandlerTest extends JiraActionHandlerTe
                 jiraAssignIssueToUserActionHandler.handle(MessageBuilder.constructBentenAssignIssueMessage(new JsonPrimitive(issueKey),currentUser));
 
         Issue issue = TestHelper.getIssueDetails(bentenJiraClient,issueKey);
-        Assert.assertEquals(TestHelper.assigneeName,issue.getAssignee().getName());
+        Assertions.assertEquals(TestHelper.assigneeName,issue.getAssignee().getName());
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(TestHelper.assigneeName));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains(TestHelper.assigneeName));
     }
 
 

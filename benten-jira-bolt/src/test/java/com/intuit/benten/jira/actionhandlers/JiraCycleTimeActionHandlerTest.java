@@ -5,9 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.intuit.benten.common.actionhandlers.BentenHandlerResponse;
 import com.intuit.benten.common.nlp.BentenMessage;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -24,7 +24,7 @@ public class JiraCycleTimeActionHandlerTest extends JiraActionHandlerTest{
     JiraCycleTimeActionHandler jiraCycleTimeActionHandler;
 
     @Test
-    @Ignore
+    @Disabled
     public void testHandleRequest(){
         BentenMessage bentenMessage = new BentenMessage();
 
@@ -39,7 +39,7 @@ public class JiraCycleTimeActionHandlerTest extends JiraActionHandlerTest{
         BentenHandlerResponse bentenHandlerResponse =
                 jiraCycleTimeActionHandler.handle(bentenMessage);
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenHtmlResponse());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenHtmlResponse());
 
     }
 

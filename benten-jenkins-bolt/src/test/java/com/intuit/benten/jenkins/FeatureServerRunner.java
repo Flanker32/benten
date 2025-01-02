@@ -2,7 +2,7 @@ package com.intuit.benten.jenkins;
 
 import com.intuit.karate.FileUtils;
 import com.intuit.karate.netty.FeatureServer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 

@@ -36,7 +36,7 @@ public class FlickrBrandCamerasActionHandler implements BentenActionHandler {
             handlerResponse.setBentenSlackResponse(SlackFlickrMessageRenderer.renderList(result));
         } catch (BentenFlickrException e) {
             BentenSlackResponse bentenSlackResponse = new BentenSlackResponse();
-            bentenSlackResponse.setSlackText(String.format("No cameras found for %s", brandName));
+            bentenSlackResponse.setSlackText("No cameras found for %s".formatted(brandName));
             handlerResponse.setBentenSlackResponse(bentenSlackResponse);
         }
 

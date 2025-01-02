@@ -13,6 +13,9 @@
         <artifactId>benten-parent</artifactId>
         <version>0.1.5</version>
     </parent>
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+  </properties>
 
     <dependencies>
         <dependency>
@@ -21,9 +24,9 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.5</version>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.3.1</version>
         </dependency>
         <dependency>
             <groupId>net.sf.json-lib</groupId>
@@ -47,6 +50,12 @@
             <version>2.4.3</version>
             <scope>test</scope>
         </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.11.4</version>
+      <scope>test</scope>
+    </dependency>
         <dependency>
             <groupId>com.intuit.karate</groupId>
             <artifactId>karate-netty</artifactId>

@@ -10,8 +10,8 @@ import com.intuit.benten.common.nlp.BentenMessage;
 import com.intuit.benten.jira.BentenJiraClient;
 import com.intuit.benten.jira.helpers.TestHelper;
 import com.intuit.benten.jira.model.Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -48,24 +48,24 @@ public class JiraSearchIssuesDetailsActionHandlerTest extends JiraActionHandlerT
         BentenHandlerResponse bentenHandlerResponse =
                 jiraIssueDetailsActionHandler.handle(bentenMessage);
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getBentenSlackAttachments().size()>0);
-        BentenSlackAttachment bentenSlackAttachment  = bentenHandlerResponse.getBentenSlackResponse().getBentenSlackAttachments().get(0);
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getBentenSlackAttachments().size()>0);
+        BentenSlackAttachment bentenSlackAttachment  = bentenHandlerResponse.getBentenSlackResponse().getBentenSlackAttachments().getFirst();
 
-        Assert.assertTrue(bentenSlackAttachment.getText().contains("test-summary"));
+        Assertions.assertTrue(bentenSlackAttachment.getText().contains("test-summary"));
         Iterator it = bentenSlackAttachment.getBentenSlackFields().iterator();
         long fields =0;
         while(it.hasNext()){
            BentenSlackField bentenSlackField = (BentenSlackField) it.next();
 
            switch (bentenSlackField.getTitle().toLowerCase()){
-               case Field.ASSIGNEE: Assert.assertEquals(TestHelper.assigneeName,bentenSlackField.getValue()); fields++; break;
-               case Field.ISSUE_TYPE : Assert.assertEquals(TestHelper.issue_type,bentenSlackField.getValue()); fields++; break;
-               case Field.STATUS : Assert.assertEquals("New",bentenSlackField.getValue()); fields++; break;
-               case Field.DESCRIPTION : Assert.assertEquals(TestHelper.description,bentenSlackField.getValue().toString()); fields++; break;
+               case Field.ASSIGNEE: Assertions.assertEquals(TestHelper.assigneeName,bentenSlackField.getValue()); fields++; break;
+               case Field.ISSUE_TYPE : Assertions.assertEquals(TestHelper.issue_type,bentenSlackField.getValue()); fields++; break;
+               case Field.STATUS : Assertions.assertEquals("New",bentenSlackField.getValue()); fields++; break;
+               case Field.DESCRIPTION : Assertions.assertEquals(TestHelper.description,bentenSlackField.getValue().toString()); fields++; break;
            }
         }
-        Assert.assertEquals(4,fields);
+        Assertions.assertEquals(4,fields);
     }
 
     @Test
@@ -84,9 +84,9 @@ public class JiraSearchIssuesDetailsActionHandlerTest extends JiraActionHandlerT
         BentenHandlerResponse bentenHandlerResponse =
                 jiraIssueDetailsActionHandler.handle(bentenMessage);
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
-        Assert.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
-        Assert.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Issue Does Not Exist"));
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenSlackResponse().getSlackText());
+        Assertions.assertTrue(bentenHandlerResponse.getBentenSlackResponse().getSlackText().contains("Issue Does Not Exist"));
 
     }
 

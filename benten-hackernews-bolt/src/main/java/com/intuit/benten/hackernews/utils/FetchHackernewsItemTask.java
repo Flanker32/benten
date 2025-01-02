@@ -2,8 +2,8 @@ package com.intuit.benten.hackernews.utils;
 
 import com.intuit.benten.common.http.HttpHelper;
 import com.intuit.benten.hackernews.exceptions.BentenHackernewsException;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import java.util.concurrent.Callable;
 
 public class FetchHackernewsItemTask implements Callable<HttpResponse> {
@@ -31,9 +31,9 @@ public class FetchHackernewsItemTask implements Callable<HttpResponse> {
             HttpGet request = new HttpGet(sb);
             HttpResponse res = httpHelper.getClient().execute(request);
 
-            if (res.getStatusLine().getStatusCode() != 200) {
+            if (res.getCode() != 200) {
                 throw new BentenHackernewsException(
-                        HackernewsConstants.ErrorMessages.ITEM_REQUEST_FAILED + res.getStatusLine().getReasonPhrase());
+                        HackernewsConstants.ErrorMessages.ITEM_REQUEST_FAILED + res.getReasonPhrase());
             }
 
             return res;

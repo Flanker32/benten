@@ -6,8 +6,7 @@ import com.flickr4java.flickr.photos.PhotoList;
 import com.intuit.benten.BaseFlickrTest;
 import com.intuit.benten.common.actionhandlers.BentenSlackResponse;
 import com.intuit.benten.flickr.helpers.FlickrResultBuilder;
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.util.Assert;
 

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -39,7 +39,7 @@ public class BentenFlickrClient{
 
    public PhotoList<Photo> searchPhotos(String mediaType, String searchValue, Integer searchLimit) throws BentenFlickrException {
      try {
-         logger.info(String.format("Searching flickr %s of %s", mediaType, searchValue));
+         logger.info("Searching flickr %s of %s".formatted(mediaType, searchValue));
          SearchParameters params = new SearchParameters();
          params.setMedia(mediaType);
          params.setExtras(Extras.MIN_EXTRAS);
@@ -67,7 +67,7 @@ public class BentenFlickrClient{
 
    public List<Camera> getBrandCameras(String brandName) throws BentenFlickrException {
        try {
-           logger.info(String.format("Getting Camera models for %s", brandName));
+           logger.info("Getting Camera models for %s".formatted(brandName));
            List<Camera> result = flickr.getCamerasInterface().getBrandModels(brandName);
            return result;
        } catch (Exception e) {

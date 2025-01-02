@@ -2,11 +2,11 @@ package com.intuit.benten.jira.http;
 
 import com.intuit.benten.common.http.HttpHelper;
 import com.intuit.benten.jira.properties.JiraProperties;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.auth.BasicScheme;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.client5.http.auth.Credentials;
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
+import org.apache.hc.client5.http.classic.methods.HttpRequestBase;
+import org.apache.hc.client5.http.impl.auth.BasicScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

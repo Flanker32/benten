@@ -2,8 +2,8 @@ package com.intuit.benten.jira.http;
 
 import com.intuit.benten.jira.model.ghc.Sprint;
 import com.intuit.benten.jira.model.ghc.SprintReport;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -24,7 +24,7 @@ public class JiraGhClientTest extends JiraClientTest{
     public void testSprints(){
         String boarId = "15493";
         List<Sprint> sprints = jiraGhClient.sprints(boarId);
-        Assert.assertTrue(sprints.size()>0);
+        Assertions.assertTrue(sprints.size()>0);
     }
 
     @Test
@@ -32,6 +32,6 @@ public class JiraGhClientTest extends JiraClientTest{
         String boarId = "15493";
         String sprintId = "71231";
         SprintReport sprintReport = jiraGhClient.sprintReport(boarId,sprintId);
-        Assert.assertEquals(sprintId,sprintReport.getSprint().getId());
+        Assertions.assertEquals(sprintId,sprintReport.getSprint().getId());
     }
 }

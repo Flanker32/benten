@@ -11,9 +11,9 @@ import com.intuit.benten.jira.exceptions.BentenJiraException;
 import com.intuit.benten.jira.model.ghc.Sprint;
 import com.intuit.benten.jira.model.ghc.SprintReport;
 import net.sf.json.JSONObject;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -40,8 +40,8 @@ public class JiraGhClient extends BentenHttpClient{
            
            HttpGet httpGet = new HttpGet(JiraGhHttpHelper.sprintsUri(boardId));
            HttpResponse httpResponse = request(httpGet);
-           if (httpResponse.getStatusLine().getStatusCode() != 200) {
-               throw new BentenJiraException(httpResponse.getStatusLine().getReasonPhrase());
+           if (httpResponse.getCode() != 200) {
+               throw new BentenJiraException(httpResponse.getReasonPhrase());
            }
            String json = EntityUtils
                    .toString(httpResponse.getEntity());
@@ -65,8 +65,8 @@ public class JiraGhClient extends BentenHttpClient{
         try {
             HttpGet httpGet = new HttpGet(JiraGhHttpHelper.sprintReportUri(boardId,sprintId));
             HttpResponse httpResponse = request(httpGet);
-            if (httpResponse.getStatusLine().getStatusCode() != 200) {
-                throw new BentenJiraException(httpResponse.getStatusLine().getReasonPhrase());
+            if (httpResponse.getCode() != 200) {
+                throw new BentenJiraException(httpResponse.getReasonPhrase());
             }
             String json = EntityUtils
                     .toString(httpResponse.getEntity());

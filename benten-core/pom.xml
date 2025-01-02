@@ -11,6 +11,9 @@
     <groupId>com.intuit.benten</groupId>
     <artifactId>benten-core</artifactId>
     <packaging>jar</packaging>
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+  </properties>
 
     <!--<parent>-->
         <!--<groupId>org.springframework.boot</groupId>-->

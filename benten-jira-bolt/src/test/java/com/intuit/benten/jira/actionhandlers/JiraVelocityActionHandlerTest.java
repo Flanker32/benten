@@ -6,8 +6,8 @@ import com.google.gson.JsonPrimitive;
 import com.intuit.benten.common.actionhandlers.BentenHandlerResponse;
 import com.intuit.benten.common.nlp.BentenMessage;
 import com.intuit.benten.jira.helpers.MessageBuilder;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
@@ -34,7 +34,7 @@ public class JiraVelocityActionHandlerTest extends JiraActionHandlerTest {
         BentenHandlerResponse bentenHandlerResponse =
                 jiraSprintVelocityActionHandler.handle(bentenMessage);
 
-        Assert.assertNotNull(bentenHandlerResponse.getBentenHtmlResponse());
+        Assertions.assertNotNull(bentenHandlerResponse.getBentenHtmlResponse());
     }
 
 }

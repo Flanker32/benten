@@ -9,6 +9,7 @@ import com.intuit.benten.jira.model.Project;
 import com.intuit.benten.jira.model.Transition;
 import com.intuit.benten.jira.model.Issue;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -44,7 +45,8 @@ public class JiraHttpClient extends BentenHttpClient {
                handleJiraException(httpResponse);
             }
 
-            String json = EntityUtils.toString(httpResponse.getEntity());
+            String json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
 
             JSONObject issuesJson = JiraConverter.objectMapper.readValue(json,JSONObject.class);
             issues = JiraConverter.convertIssuesMapToIssues(issuesJson);
@@ -64,7 +66,8 @@ public class JiraHttpClient extends BentenHttpClient {
             if(httpResponse.getCode()!=200){
                 handleJiraException(httpResponse);
             }
-            String json = EntityUtils.toString(httpResponse.getEntity());
+            String json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
 
             JSONObject issuesJson = JiraConverter.objectMapper.readValue(json,JSONObject.class);
             issue =JiraConverter.convertJsonObjectToIssue(issuesJson);
@@ -81,7 +84,6 @@ public class JiraHttpClient extends BentenHttpClient {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("fields",fields);
             StringEntity stringEntity = formPayload(jsonObject);
-            stringEntity.setContentType("application/json");
             httpPut.setEntity(stringEntity);
             HttpResponse httpResponse = request(httpPut);
             if(httpResponse.getCode()!=204){
@@ -133,7 +135,9 @@ public class JiraHttpClient extends BentenHttpClient {
             if(httpResponse.getCode()!=200){
                handleJiraException(httpResponse);
             }
-            String json = EntityUtils.toString(httpResponse.getEntity());
+            String json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+
             JSONObject jsonObject = JiraConverter.objectMapper
                     .readValue(json,JSONObject.class);
             List<Transition> transitions= JiraConverter.objectMapper
@@ -171,7 +175,9 @@ public class JiraHttpClient extends BentenHttpClient {
             if(httpResponse.getCode()!=200){
                 handleJiraException(httpResponse);
             }
-            String json = EntityUtils.toString(httpResponse.getEntity());
+            String json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+
             JSONObject jsonObject = JiraConverter.objectMapper
                     .readValue(json,JSONObject.class);
             List<Project> projects = JiraConverter.objectMapper.readValue(jsonObject.get("projects").toString(),new TypeReference<List<Project>>(){});
@@ -193,13 +199,14 @@ public class JiraHttpClient extends BentenHttpClient {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("fields",fields);
             StringEntity stringEntity = formPayload(jsonObject);
-            stringEntity.setContentType("application/json");
             httpPost.setEntity(stringEntity);
             HttpResponse httpResponse = request(httpPost);
             if(httpResponse.getCode()!=201){
                 handleJiraException(httpResponse);
             }
-            String json = EntityUtils.toString(httpResponse.getEntity());
+            String json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+
             JSONObject response = JiraConverter.objectMapper
                     .readValue(json,JSONObject.class);
            return JiraHttpHelper.browseIssueUri((String)response.get("key")).toString();
@@ -212,14 +219,20 @@ public class JiraHttpClient extends BentenHttpClient {
         String payload;
         StringEntity stringEntity;
         payload =  JiraConverter.objectMapper.writeValueAsString(jsonObject);
-        stringEntity = new StringEntity(payload, "UTF-8");
-        stringEntity.setContentType("application/json");
+        stringEntity = new StringEntity(payload,ContentType.APPLICATION_JSON, "UTF-8", false);
         return stringEntity;
     }
 
 
     private void handleJiraException(HttpResponse httpResponse) throws IOException {
-        String json = EntityUtils.toString(httpResponse.getEntity());
+        String json = null;
+        try {
+            json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+        } catch (ParseException e) {
+            throw new IOException(e);
+        }
+
         JiraError jiraError = JiraConverter.objectMapper.readValue(json, JiraError.class);
         JSONObject error = jiraError.getErrors();
         if(error.size()>0) {

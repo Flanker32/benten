@@ -1,6 +1,9 @@
 package com.intuit.benten.rest;
 
 import com.intuit.benten.common.http.HttpHelper;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.hc.core5.http.HttpEntityContainer;
+import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -25,7 +28,11 @@ public class MockController {
     public String returnIssueFromMock(@PathVariable String id) throws IOException {
         HttpGet httpGet = new HttpGet("http://localhost:8001/browse/"+id);
         HttpResponse httpResponse = httpHelper.getClient().execute(httpGet);
-        String response = EntityUtils.toString(httpResponse.getEntity());
-        return response;
+        try {
+           return httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+        } catch (ParseException e) {
+            throw new IOException(e);
+        }
     }
 }

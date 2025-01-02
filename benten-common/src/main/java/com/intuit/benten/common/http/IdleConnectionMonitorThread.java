@@ -1,9 +1,10 @@
 /**
- * 
+ *
  */
 package com.intuit.benten.common.http;
 
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.core5.util.TimeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Idle Connection Monitor Thread - to check sanity of connections
- * 
+ *
  * @author jkuria
  */
 class IdleConnectionMonitorThread extends Thread {
@@ -45,13 +46,13 @@ class IdleConnectionMonitorThread extends Thread {
 							reapInterval);
 					wait(reapInterval);
 					// Close expired connections
-					connMgr.closeExpiredConnections();
+					connMgr.close();
 					// Optionally, close connections
 					// that have been idle longer than 30 sec
 					LOG.trace("Closing idle connections older than {} ms",
 							idleConnectionsTimeout);
-					connMgr.closeIdleConnections(idleConnectionsTimeout,
-							TimeUnit.MILLISECONDS);
+					connMgr.closeIdle(TimeValue.of(idleConnectionsTimeout,
+                        TimeUnit.MILLISECONDS));
 				}
 			}
 		} catch (InterruptedException ex) {

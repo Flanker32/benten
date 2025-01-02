@@ -1,6 +1,7 @@
 package com.intuit.benten.common.http;
 import org.apache.hc.core5.http.HeaderElement;
-import org.apache.hc.core5.http.HeaderElementIterator;
+//import org.apache.hc.core5.http.HeaderElementIterator;
+import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.client5.http.config.RequestConfig;
@@ -9,15 +10,17 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.core5.http.message.BasicHeaderElementIterator;
-import org.apache.hc.core5.http.protocol.HTTP;
 import org.apache.hc.core5.http.protocol.HttpContext;
-import org.apache.log4j.Logger;
+import org.apache.hc.core5.util.TimeValue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
 
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -78,7 +81,7 @@ public class HttpHelper {
     private IdleConnectionMonitorThread idcm;
 
 
-    protected static final Logger LOGGER = Logger
+    protected static final Logger LOGGER = LogManager
             .getLogger(HttpHelper.class);
 
     private PoolingHttpClientConnectionManager poolingHttpClientConnectionManager;
@@ -94,22 +97,22 @@ public class HttpHelper {
                 .setDefaultMaxPerRoute(this.maxConnectionsPerRoute);
 
         ConnectionKeepAliveStrategy myStrategy = new ConnectionKeepAliveStrategy() {
-            public long getKeepAliveDuration(HttpResponse response,
-                                             HttpContext context) {
-                HeaderElementIterator it = new BasicHeaderElementIterator(
-                        response.headerIterator(HTTP.CONN_KEEP_ALIVE));
+            public TimeValue getKeepAliveDuration(HttpResponse response,
+                                                  HttpContext context) {
+                BasicHeaderElementIterator it = new BasicHeaderElementIterator(
+                        response.headerIterator(HttpHeaders.CONNECTION));
                 while (it.hasNext()) {
-                    HeaderElement he = it.nextElement();
+                    HeaderElement he = it.next();
                     String param = he.getName();
                     String value = he.getValue();
                     if (value != null && param.equalsIgnoreCase("timeout")) {
                         try {
-                            return Long.parseLong(value) * 1000;
+                            return TimeValue.of(Long.parseLong(value), TimeUnit.MILLISECONDS);
                         } catch (NumberFormatException ignore) {
                         }
                     }
                 }
-                return keepAliveDurationMilliseconds;
+                return TimeValue.of(keepAliveDurationMilliseconds, TimeUnit.MILLISECONDS);
             }
 
         };
@@ -121,7 +124,7 @@ public class HttpHelper {
                 .setConnectionRequestTimeout(this.connReqTimeoutMilliseconds, TimeUnit.MILLISECONDS)
                 .setConnectTimeout(connTimeoutMilliseconds, TimeUnit.MILLISECONDS)
                 .setResponseTimeout(this.socketTimeoutMilliseconds, TimeUnit.MILLISECONDS)
-                .setStaleConnectionCheckEnabled(false)
+//                .setStaleConnectionCheckEnabled(false)
                 .setRedirectsEnabled(true).setMaxRedirects(maxRedirects)
                 .build();
         HttpClientBuilder builder = HttpClientBuilder.create()

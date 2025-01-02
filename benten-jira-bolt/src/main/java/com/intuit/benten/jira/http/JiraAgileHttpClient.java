@@ -7,6 +7,8 @@ import com.intuit.benten.jira.exceptions.BentenJiraException;
 import com.intuit.benten.jira.model.Issue;
 import com.intuit.benten.jira.model.agile.Board;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
+import org.apache.hc.core5.http.HttpEntityContainer;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -32,8 +34,9 @@ public class JiraAgileHttpClient extends BentenHttpClient {
             if (httpResponse.getCode() != 200) {
                 throw new BentenJiraException(httpResponse.getReasonPhrase());
             }
-            String json = EntityUtils
-                    .toString(httpResponse.getEntity());
+            String json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+
             JSONObject jsonObject = JiraConverter.objectMapper.readValue(json, JSONObject.class);
 
             if(!JiraConverter.isNull(jsonObject.get("values") )){
@@ -56,8 +59,9 @@ public class JiraAgileHttpClient extends BentenHttpClient {
             if (httpResponse.getCode() != 200) {
                 throw new BentenJiraException(httpResponse.getReasonPhrase());
             }
-            String json = EntityUtils
-                    .toString(httpResponse.getEntity());
+            String json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+
             JSONObject jsonObject =JiraConverter.objectMapper.readValue(json, JSONObject.class);
 
             List<Issue> issues =JiraConverter.convertIssuesMapToIssues(jsonObject);

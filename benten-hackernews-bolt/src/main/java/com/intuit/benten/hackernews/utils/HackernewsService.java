@@ -5,6 +5,9 @@ import com.intuit.benten.hackernews.exceptions.BentenHackernewsException;
 import com.intuit.benten.hackernews.model.HackernewsItem;
 import com.intuit.benten.hackernews.model.HackernewsSetRange;
 import com.intuit.benten.hackernews.properties.HackernewsProperties;
+import org.apache.commons.lang.StringUtils;
+import org.apache.hc.core5.http.HttpEntityContainer;
+import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -57,10 +60,11 @@ public class HackernewsService {
                 throw new BentenHackernewsException(message);
             }
 
-            String json = EntityUtils.toString(res.getEntity());
+            String json = res instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)res).getEntity() ): StringUtils.EMPTY;
             List<Integer> hackerNewsItemIds = parseListOfIds(json, resultSetSize, offset, startIndex);
             return fetchHackerNewsItems(hackerNewsItemIds);
-        } catch (IOException e) {
+        } catch (IOException  | ParseException e) {
             throw new BentenHackernewsException("requestItemIds result could not be handled", e.getMessage());
         }
     }

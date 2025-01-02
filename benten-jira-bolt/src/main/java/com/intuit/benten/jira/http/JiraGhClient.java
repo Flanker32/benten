@@ -11,6 +11,8 @@ import com.intuit.benten.jira.exceptions.BentenJiraException;
 import com.intuit.benten.jira.model.ghc.Sprint;
 import com.intuit.benten.jira.model.ghc.SprintReport;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
+import org.apache.hc.core5.http.HttpEntityContainer;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -37,14 +39,15 @@ public class JiraGhClient extends BentenHttpClient{
 
     public List<Sprint> sprints(String boardId)  {
        try {
-           
+
            HttpGet httpGet = new HttpGet(JiraGhHttpHelper.sprintsUri(boardId));
            HttpResponse httpResponse = request(httpGet);
            if (httpResponse.getCode() != 200) {
                throw new BentenJiraException(httpResponse.getReasonPhrase());
            }
-           String json = EntityUtils
-                   .toString(httpResponse.getEntity());
+           String json = httpResponse instanceof HttpEntityContainer ?
+               EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+
            JSONObject jsonObject=
                    objectMapper.readValue(json, JSONObject.class);
            if(!JiraConverter.isNull(jsonObject.get("sprints"))){
@@ -68,8 +71,9 @@ public class JiraGhClient extends BentenHttpClient{
             if (httpResponse.getCode() != 200) {
                 throw new BentenJiraException(httpResponse.getReasonPhrase());
             }
-            String json = EntityUtils
-                    .toString(httpResponse.getEntity());
+            String json = httpResponse instanceof HttpEntityContainer ?
+                EntityUtils.toString( ((HttpEntityContainer)httpResponse).getEntity() ): StringUtils.EMPTY;
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm a");
             dateFormat.set2DigitYearStart(new GregorianCalendar(2001,1,1)
                     .getTime());

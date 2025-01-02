@@ -8,6 +8,7 @@ import com.intuit.benten.common.formatters.SlackFormatter;
 import com.intuit.benten.common.helpers.BentenMessageHelper;
 import com.intuit.benten.common.http.HttpHelper;
 import com.intuit.benten.common.nlp.BentenMessage;
+import org.apache.hc.core5.http.HttpEntityContainer;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -40,7 +41,8 @@ public class BentenExampleAction implements BentenActionHandler {
 
                 HttpGet httpGet = new HttpGet("https://bentenapp.herokuapp.com/health");
                 HttpResponse httpResponse = httpHelper.getClient().execute(httpGet);
-                String response = EntityUtils.toString(httpResponse.getEntity());
+                String response = httpResponse instanceof HttpEntityContainer ?
+                        EntityUtils.toString(((HttpEntityContainer) httpResponse).getEntity()) : "";
 
                 Thread.sleep(1000);
 

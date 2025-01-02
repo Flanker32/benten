@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intuit.benten.hackernews.exceptions.BentenHackernewsException;
 import com.intuit.benten.hackernews.model.HackernewsItem;
+import org.apache.commons.lang.StringUtils;
+import org.apache.hc.core5.http.HttpEntityContainer;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 import java.util.concurrent.Executors;
@@ -25,7 +27,8 @@ public class HackernewsExecutorService {
             List<Future<HttpResponse>> futures = executorService.invokeAll(tasks);
             return futures.stream().map(x -> {
                 try {
-                    String json = EntityUtils.toString(x.get().getEntity());
+                    String json = x.get() instanceof HttpEntityContainer ?
+                        EntityUtils.toString( ((HttpEntityContainer)x.get()).getEntity() ): StringUtils.EMPTY;
                     return objectMapper.readValue(json, HackernewsItem.class);
                 } catch (Exception e) {
                     throw new BentenHackernewsException(e.getMessage());
